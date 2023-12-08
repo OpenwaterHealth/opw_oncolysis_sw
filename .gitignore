@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*__pycache__*
+*.pyc
+*.egg-info/
+.installed.cfg
+*.egg
+*.log
+.idea*
+env/
+env32/
+oncolysis_ctrl/CONFIG_ID.txt
+src/
+LabView/
+dll/
+docs/build/
+docs/_autosummary/
