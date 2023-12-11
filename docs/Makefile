@@ -6,8 +6,8 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
-#BUILDDIR      = build
-BUILDDIR      = ../../opw_oncolysis_docs
+BUILDDIR      = build
+#BUILDDIR      = ../../opw_oncolysis_docs
 PDFBUILDDIR   = /tmp
 PDF           = ../manual.pdf
 
