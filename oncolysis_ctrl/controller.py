@@ -1,3 +1,14 @@
+"""
+Primary Controller Module
+=========================
+
+This module contains the primary controller class for the Oncolysis System, `Controller`, a helper
+class `ControlQueue`, and a control loop function `control_loop`. A Controller object manages
+the connections and communication to the hardware, translating high level instructions into
+low level commands. The ControlQueue object provides a thread-safe interface to the Controller, 
+which is necessary for the GUI. The control_loop function is the main loop for the ControlQueue,
+processing the commands entered in the Queue and issuing them to the Controller. 
+"""
 import queue
 import tkinter.messagebox
 from multiprocessing import Queue
@@ -27,6 +38,7 @@ class Controller(object):
                  voltage_calibration=constants.CALIB, simulate=False):
         """
         Controller constructor
+
         :param frequencies: list of frequencies to treat
         :param pressure: pressure to treat at
         :param duration: duration of treatment
@@ -448,6 +460,7 @@ class ControlQueue:
 def control_loop(controller, control_queue, on_open=None, on_treat=None, on_wait=None, on_end=None, on_close=None, on_error=None):
     """
     Control Loop for Oncolysis System
+    
     :param controller: controller object
     :param control_queue: control queue
     :param on_open: callback to execute on open

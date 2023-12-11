@@ -1,3 +1,9 @@
+"""
+RF Switch Module
+================
+
+This module contains the class for the RF Switch.
+"""
 import logging
 import os
 import serial
@@ -19,13 +25,21 @@ logger = logging.getLogger("oc.rf_switch")
 
 
 class RFSwitch:
+    """
+    RF Switch
+    =========
+
+    This class represents the RF Switch. It is responsible for connecting to the
+    switch, setting the switch position, and disconnecting from the switch.
+    """
     def __init__(self, comport=None, sn=None, vid=constants.RADIALL_VID, pid=constants.RADIALL_PID):
         """
         RFSwitch constructor
+
         :param comport: explicit comport (e.g. 'COM3') or None
         :param sn: serial number of USB device (e.g. '31ASW22017741') or None
-        :param vid:
-        :param pid:
+        :param vid: vendor ID
+        :param pid: product ID
         """
         self.comport = comport
         self.interface = USBInterface()
@@ -37,7 +51,6 @@ class RFSwitch:
     def open(self):
         """
         Open the connection to the switch
-        :return:
         """
         if self.is_open:
             logger.warning('[close] Already connected')
@@ -67,8 +80,8 @@ class RFSwitch:
     def set_position(self, position):
         """
         Set position of switch
+
         :param int position: requested position setting (skip if None)
-        :return:
         """
         if position is not None:
             logger.info(f'[set_position] Setting {self.comport} to {position}')
@@ -83,7 +96,8 @@ class RFSwitch:
 
     def get_position(self):
         """
-        Get current switch positions
+        Get current switch position
+                
         :return: int switch position
         """
         return self.interface.GetPosition()
@@ -91,7 +105,6 @@ class RFSwitch:
     def close(self):
         """
         Close the connection to the switch
-        :return:
         """
         if self.is_open:
             close_ok = self.interface.Close()
@@ -106,6 +119,7 @@ class RFSwitch:
 def get_comport(vid, pid=None, sn=None):
     """
     Return device name of COM port matching VID and PID
+
     :param vid: Vendor ID
     :param pid: Product ID (or None)
     :param sn: Serial number (or None)
@@ -122,6 +136,7 @@ def get_comport(vid, pid=None, sn=None):
 def get_port_info():
     """
     Get all connected COM Ports and structure their info
+
     :return: list of attribute dictionaries
     """
     attrs = ['description',

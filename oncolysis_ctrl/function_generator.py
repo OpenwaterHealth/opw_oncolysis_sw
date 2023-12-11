@@ -1,18 +1,35 @@
+"""
+Function Generator Control Module
+=================================
+
+This module provides Classes for controlling the function generator. 
+While the serial commands can be directly issued according to the function
+generator's API via function_generator.inst, this class provides a series
+of convenience methods for configuring the function generator.
+"""
 import logging
 import pyvisa
 from oncolysis_ctrl import config
 constants = config.constants
-
 logger = logging.getLogger("oc.function_generator")
 
 
 class FunctionGenerator:
+    """
+    Function Generator
+    ==================
+
+    Most functionality is found in the `Channel` objects, but this class
+    provides a convenient interface for accessing them and manages the
+    connection to the instrument.
+    """
     def __init__(self, vid=constants.RIGOL_DG4162_VID,
                  pid=constants.RIGOL_DG4162_PID,
                  channels=constants.CHANNELS,
                  max_voltage=constants.MAX_VOLTAGE):
         """
         Initialize function generator. Does not open connection.
+        
         :param vid: vendor id for USB device (defaults for RIGOL DG4162)
         :param pid: product id for USB device (defaults for RIGOL DG4162)
         :param channels: tuple of available channels (default (1,2))
@@ -29,7 +46,6 @@ class FunctionGenerator:
     def open(self):
         """
         Opens the connection to the function generator
-        :return:
         """
         if self.is_open:
             logger.warning('[close] Already connected')
@@ -54,7 +70,6 @@ class FunctionGenerator:
     def close(self):
         """
         Closes the connection to the function generator
-        :return:
         """
         if self.is_open:
             try:
@@ -72,9 +87,19 @@ class FunctionGenerator:
 
 
 class Channel:
+    """
+    Function Generator Channel
+    ==========================
+
+    The Channel class provides an interface for configuring one of the 
+    output channels on a function generator. Direct access to the instrument
+    is provided through the `inst` attribute, but most functionality is
+    provided through the methods of this class.
+    """
     def __init__(self, channel, inst, max_voltage=None):
         """
         Instantiate function generator channel
+
         :param channel: channel number (1 or 2 for RIGOL)
         :param inst: pyvisa connection to instrument
         :param max_voltage: maximum voltage limit (V)
@@ -86,13 +111,13 @@ class Channel:
     def apply(self, mode, frequency=None, amplitude=None, offset=None, phase=None, delay=None):
         """
         Apply a basic waveform to the channel. Can use short form ('SIN') or long form ('SINUSOID')
+
         :param mode: waveform mode ('CUSTom','HARMonic, 'NOISe', 'PULSe', 'RAMP', 'SINusoid', 'SQUare', 'USER')
         :param frequency: Hz (not available for NOISE)
         :param amplitude: V_pp, not available for NOISE, requires frequency
         :param offset: V_DC, requires frequency and amplitude
         :param phase: degrees, not available for NOISE or PULSE, requires frequency, amplitude, offset
         :param delay: seconds, only available for PULSE, requires frequency, amplitude, offset
-        :return:
         """
         mode = mode.upper()
         if 'NOIS' in mode:
@@ -123,6 +148,7 @@ class Channel:
     def get_settings(self):
         """
         Get basic waveform settings.
+
         :return: dict of settings. Usable as input with `set_input(**settings)`
         """
         settings = self.inst.query(f'SOURCE{self.channel}:APPLY?')
@@ -146,14 +172,14 @@ class Channel:
                    polarity_invert=None, sync_invert=None, sync_en=None):
         """
         Sets the output of the particular channel
+
         :param bool enabled: enable the output
-        :param impedance : output impedance. (ohms (int), 'INF', 'MIN', or 'MAX')
+        :param impedance: output impedance. (ohms (int), 'INF', 'MIN', or 'MAX')
         :param noise_scale: superposed noise scale (percent, 'MIN', or 'MAX')
-        :param bool noise_en : enabled superposed noise
+        :param bool noise_en: enabled superposed noise
         :param bool polarity_invert: invert the output
         :param bool sync_invert: invert the sync signal
         :param bool sync_en: enable the sync signal
-        :return:
         """
         enable_map = {True: 'ON', False: 'OFF', None: None}
         inv_norm_map = {True: 'INV', False: 'NORM', None: None}
@@ -175,6 +201,7 @@ class Channel:
     def get_output(self):
         """
         Get the output settings for this channel
+
         :return: dict of output settings (usable as input with `set_output(**output)`)
         """
         enable_map = {'ON': True, 'OFF': False}
@@ -196,6 +223,21 @@ class Channel:
 
     def set_burst(self, enabled=None, period=None, mode=None, cycles=None, phase=None, delay=None, trig_negative=None,
                   trig_source=None, trig_out_en=None, trig_out_negative=None, gate_invert=None):
+        """
+        Set Burst Parameters
+
+        :param bool enabled: enable burst mode
+        :param float period: burst period (s)
+        :param str mode: burst mode ('TRIG', others possible)
+        :param int cycles: number of cycles
+        :param float phase: phase (degrees)
+        :param float delay: delay (s)
+        :param bool trig_negative: trigger polarity (True: negative, False: positive)
+        :param str trig_source: trigger source ('INT', others possible)
+        :param bool trig_out_en: enable trigger output
+        :param bool trig_out_negative: trigger output polarity (True: negative, False: positive)
+        :param bool gate_invert: gate polarity (True: inverted, False: normal)
+        """
         enable_map = {True: 'ON', False: 'OFF', None: None}
         inv_norm_map = {True: 'INV', False: 'NORM', None: None}
         neg_pos_map = {True: 'NEGATIVE', False: 'POSITIVE', None: None}
@@ -229,7 +271,6 @@ class Channel:
     def trig_burst(self):
         """
         Trigger a burst immediately
-        :return:
         """
         logger.info(f'[trig_burst] triggering burst on channel {self.channel}')
         self.inst.write(f'SOURCE{self.channel}:BURST:TRIGGER:IMMEDIATE')
@@ -237,6 +278,7 @@ class Channel:
     def get_burst(self):
         """
         Get burst parameters
+
         :return: dict of burst mode parameters
         """
         enable_map = {'ON': True, 'OFF': False}
@@ -264,8 +306,8 @@ class Channel:
     def set_frequency(self, frequency, **kwargs):
         """
         Set frequency
+
         :param frequency: frequency (Hz)
-        :return:
         """
         logger.info(f'[set_frequency] Setting frequency to {frequency}')
         command = f'SOURCE{self.channel}:FREQUENCY:FIXED {frequency}'
@@ -276,6 +318,7 @@ class Channel:
     def get_frequency(self):
         """
         Query the frequency of the basic waveform
+
         :return: frequency (Hz)
         """
         command = f'SOURCE{self.channel}:FREQUENCY:FIXED?'
@@ -303,9 +346,9 @@ class Channel:
     def set_period(self, period):
         """
         Set the period of the basic waveform and the default unit is "s".
+
         :param float period: seconds
-        :return:
-        """
+         """
         logger.info(f'[set_period] Setting period to {period}')
         command = f'SOURCE{self.channel}:PERIOD {period}'
         self.inst.write(command)
@@ -313,6 +356,7 @@ class Channel:
     def get_period(self):
         """
         Query the period of the basic waveform
+
         :return: period (s)
         """
         command = f'SOURCE{self.channel}:PERIOD?'
@@ -339,13 +383,12 @@ class Channel:
     def set_voltage(self, voltage=None, hi=None, lo=None, offset=None, unit=None):
         """
         Set voltage settings
+
         :param voltage: Set the amplitude of the basic waveform and the default unit is "Vpp".
         :param hi: Set the high level of the basic waveform and the default unit is "V".
         :param lo: Set the low level of the basic waveform and the default unit is "V".
         :param offset: Set the DC offset voltage and the default unit is "VDC".
         :param unit: Set the amplitude unit to VPP, VRMS or DBM.
-
-        :return:
         """
         if voltage and self.max_voltage and voltage > self.max_voltage:
             raise ValueError(f'Requested voltage ({voltage} V) exceeds maximum allowable for '
@@ -365,6 +408,7 @@ class Channel:
     def get_voltage(self):
         """
         Get voltage settings
+
         :return: dict of voltage settings
         """
         attrs = ('LEVEL:IMMEDIATE:AMPLITUDE', 'LEVEL:IMMEDIATE:HIGH', 'LEVEL:IMMEDIATE:LOW',

@@ -1,3 +1,6 @@
+"""
+Global Default Constants
+"""
 ID = ''
 NAME = ''
 AMPLIFIER_GAIN = 562.3
