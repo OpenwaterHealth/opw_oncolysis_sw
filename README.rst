@@ -24,3 +24,15 @@ Enable Windows to load drivers from unknown sources:
 Download and install the Radiall USB Drivers from `https://www.radiall.com/products/rf-microwave-switches/usb-coaxial-switches.html <https://www.radiall.com/products/rf-microwave-switches/usb-coaxial-switches.html>`_. 
 
 Copy the folder containing ``CP210xRuntime.dll``, ``Radial_USBInterface.dll`` and ``Radial_USBInterface.xml`` into a folder called ``dll`` in the root directory of the project.
+
+License
+-------
+This project is licensed under the GNU Affero General Public License v3.0. See [LICENSE](LICENSE) for details.
+
+Contributing
+------------
+See [Contributor Guidelines](Contributor-Guidelines) for details.
+
+Disclaimer
+----------
+CAUTION - Investigational device. Limited by Federal (or United States) law to investigational use. The system described here has *not* been evaluated by the FDA and is not designed for the treatment or diagnosis of any disease. It is provided AS-IS, with no warranties. User assumes all liability and responsibility for identifying and mitigating risks associated with using this software.
