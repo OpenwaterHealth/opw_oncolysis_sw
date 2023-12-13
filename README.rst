@@ -31,7 +31,7 @@ This project is licensed under the GNU Affero General Public License v3.0. See `
 
 Contributing
 ------------
-See `Contributor Guidelines <Contributor-Guidelines>`_ for details.
+See `Contributor Guidelines <Contributor-Guidelines.md>`_ for details.
 
 Disclaimer
 ----------
