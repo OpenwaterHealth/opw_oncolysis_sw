@@ -27,11 +27,11 @@ Copy the folder containing ``CP210xRuntime.dll``, ``Radial_USBInterface.dll`` an
 
 License
 -------
-This project is licensed under the GNU Affero General Public License v3.0. See [LICENSE](LICENSE) for details.
+This project is licensed under the GNU Affero General Public License v3.0. See `LICENSE <LICENSE>`_ for details.
 
 Contributing
 ------------
-See [Contributor Guidelines](Contributor-Guidelines) for details.
+See `Contributor Guidelines <Contributor-Guidelines>`_ for details.
 
 Disclaimer
 ----------
