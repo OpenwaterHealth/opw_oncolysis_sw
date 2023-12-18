@@ -1,0 +1,4 @@
+pyserial>=3.5
+pyvisa>=1.11.3
+numpy>=1.22.3
+pythonnet>=2.5.2
