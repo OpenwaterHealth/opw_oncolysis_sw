@@ -2,7 +2,7 @@ Oncolysis Controller
 ====================
 This repository contains the code for operating Openwater's preclinical oncolysis platform. The Openwater Preclinical Oncolysis Prototype is designed to help researchers investigate the effect of different ultrasound parameters on a variety of in vitro and preclinical in vivo targets. Certain acoustic parameters may be well suited for damaging cancer cells while sparing surrounding healthy tissue, and this system is designed to systematically explore such effects in a laboratory setting. 
 
-For more information on this technology, refer to the `wiki <https://wiki.openwater.health/index.php/Oncolysis>`_.
+For more information on this technology, refer to the `wiki <https://wiki.openwater.health/index.php/Openwater_Wiki#Oncolysis>`_.
 
 Installation Instructions
 -------------------------
